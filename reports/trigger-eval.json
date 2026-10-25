@@ -1,0 +1,205 @@
+{
+  "ok": true,
+  "threshold": 0.6,
+  "description_concepts": [
+    "action",
+    "device"
+  ],
+  "missing_description_concepts": [],
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "false_positive": 0,
+    "false_negative": 0,
+    "pass_rate": 1.0
+  },
+  "failures": [],
+  "results": {
+    "should_trigger": [
+      {
+        "prompt": "下载《道德经》并发到 Kindle",
+        "family": "default",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "把这本 EPUB 传到 Kindle",
+        "family": "default",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "Send this ebook to Kindle",
+        "family": "default",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "发送 /tmp/book.pdf 到 Kindle",
+        "family": "default",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "用 qiaomu-send2kindle 给 Kindle 传书",
+        "family": "default",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "qiaomu-send2kindle",
+        "family": "default",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": null
+      }
+    ],
+    "should_not_trigger": [
+      {
+        "prompt": "帮我下载一本电子书",
+        "family": "default",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.0,
+        "matched_concepts": [],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "找一下《道德经》",
+        "family": "default",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.0,
+        "matched_concepts": [],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "解释 KOReader 是什么",
+        "family": "default",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.0,
+        "matched_concepts": [],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "Kindle 越狱教程",
+        "family": "default",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.333,
+        "matched_concepts": [
+          "device"
+        ],
+        "negative_pattern": "越狱教程"
+      },
+      {
+        "prompt": "用邮件发送到 Kindle",
+        "family": "default",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": "邮件"
+      },
+      {
+        "prompt": "下载这本书，不要发送到 Kindle",
+        "family": "default",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": "不要发送"
+      }
+    ],
+    "near_neighbor": [
+      {
+        "prompt": "把 PDF 发给朋友",
+        "family": "default",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.0,
+        "matched_concepts": [],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "只解释 Kindle 怎么用",
+        "family": "default",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.333,
+        "matched_concepts": [
+          "device"
+        ],
+        "negative_pattern": "只解释"
+      },
+      {
+        "prompt": "我的 Kindle 不能开机",
+        "family": "default",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.333,
+        "matched_concepts": [
+          "device"
+        ],
+        "negative_pattern": null
+      }
+    ]
+  }
+}

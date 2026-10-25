@@ -1,0 +1,41 @@
+{
+  "name": "qiaomu-send2kindle",
+  "version": "2.0.0",
+  "owner": "Qiaomu",
+  "updated_at": "2026-10-25",
+  "status": "release-candidate",
+  "maturity_tier": "governed",
+  "review_cadence": "on SSH, system credential, receiver or ebook MCP changes",
+  "release_gates": [
+    "package validation",
+    "trigger eval",
+    "Python behavior/security tests",
+    "independent AZW3 reader tests",
+    "real device readback in both modes",
+    "clean-install independent process",
+    "secret scan"
+  ],
+  "intent": {
+    "job_to_be_done": "Find the requested ebook, inspect its identity and deliver it over Wi-Fi with a verified receipt.",
+    "target_users": [
+      "Owners of paired jailbroken Kindle devices, with or without Obsidian"
+    ],
+    "inputs": [
+      "Book title and optional author, language or edition",
+      "Or an explicit local ebook path",
+      "Physically paired device and unlocked OS credential storage"
+    ],
+    "outputs": [
+      "Verified Kindle documents path, byte count and SHA256",
+      "Original source digest and explicit native scan state",
+      "Actionable failure without a false success claim"
+    ],
+    "exclusions": [
+      "Jailbreaking and firmware changes",
+      "Email-based Amazon Send to Kindle",
+      "Silent key export or passwordless login",
+      "Only finding or downloading without device delivery"
+    ]
+  },
+  "upstream_inspiration": "joeseesun/qiaomu-reader"
+}

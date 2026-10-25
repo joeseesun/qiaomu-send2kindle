@@ -1,0 +1,48 @@
+{
+  "positive_concepts": {
+    "device": [
+      "kindle",
+      "qiaomu-send2kindle"
+    ],
+    "action": [
+      "发送",
+      "发到",
+      "传到",
+      "send",
+      "传书",
+      "qiaomu-send2kindle"
+    ]
+  },
+  "description_required_concepts": [
+    "device",
+    "action"
+  ],
+  "recommended_threshold": 0.6,
+  "negative_patterns": [
+    "邮件",
+    "不要发送",
+    "只解释",
+    "越狱教程"
+  ],
+  "should_trigger": [
+    "下载《道德经》并发到 Kindle",
+    "把这本 EPUB 传到 Kindle",
+    "Send this ebook to Kindle",
+    "发送 /tmp/book.pdf 到 Kindle",
+    "用 qiaomu-send2kindle 给 Kindle 传书",
+    "qiaomu-send2kindle"
+  ],
+  "should_not_trigger": [
+    "帮我下载一本电子书",
+    "找一下《道德经》",
+    "解释 KOReader 是什么",
+    "Kindle 越狱教程",
+    "用邮件发送到 Kindle",
+    "下载这本书，不要发送到 Kindle"
+  ],
+  "near_neighbor": [
+    "把 PDF 发给朋友",
+    "只解释 Kindle 怎么用",
+    "我的 Kindle 不能开机"
+  ]
+}

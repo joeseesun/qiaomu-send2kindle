@@ -1,0 +1,15 @@
+interface:
+  display_name: "乔木无线传书"
+  short_description: "独立无线传书，兼容 KOReader 与原生阅读"
+  default_prompt: "使用 qiaomu-send2kindle 核对电子书后直传 Kindle；无需打开 Obsidian，其原有功能继续保留；需要下载时使用乔木电子书 MCP。凭据使用系统存储，传输完整回读校验后报告送达，原生扫描与设备打开分别确认。"
+compatibility:
+  canonical_format: "agent-skills"
+  adapter_targets: [openai, claude, generic, agent-skills-compatible]
+  trust:
+    source_tier: "first-party"
+    remote_inline_execution: "forbid"
+  permissions:
+    network: "explicit ebook MCP download, paired private-LAN Kindle, and checksum-pinned receiver preparation"
+    file_write: "requested downloads, machine device metadata/runtime, explicitly selected USB public pairing/settings"
+    subprocess: "isolated Python dependencies and fixed bundled Node converter; no shell interpolation"
+    secrets: "native OS credential backend only; in-memory auth; no vault, argv, log, file export or plaintext fallback"
