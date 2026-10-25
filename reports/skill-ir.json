@@ -1,0 +1,122 @@
+{
+  "schema_version": "2.0.0-qiaomu-lite",
+  "generated_at": "2026-10-25",
+  "package": {
+    "name": "qiaomu-send2kindle",
+    "version": "2.0.0",
+    "owner": "Qiaomu",
+    "maturity_tier": "governed",
+    "lifecycle_stage": null,
+    "upstream_inspiration": "joeseesun/qiaomu-reader",
+    "upstream_sync": {}
+  },
+  "intent": {
+    "description": "将电子书通过 Wi-Fi 无线发送到已越狱并已配对的 Kindle，兼容 KOReader 与 Kindle 原生接收端。用户说“下载《书名》并发到 Kindle”“把这本 EPUB 传到 Kindle”“Send this ebook to Kindle”或点名 qiaomu-send2kindle 时使用。需要找书或下载时先调用乔木电子书 MCP，再核对图书并传送。仅找书、仅下载、解释 Kindle、越狱、刷固件和邮件 Send to Kindle 不属于此 skill。\n",
+    "job_to_be_done": "Find the requested ebook, inspect its identity and deliver it over Wi-Fi with a verified receipt.",
+    "target_users": [
+      "Owners of paired jailbroken Kindle devices, with or without Obsidian"
+    ],
+    "inputs": [
+      "Book title and optional author, language or edition",
+      "Or an explicit local ebook path",
+      "Physically paired device and unlocked OS credential storage"
+    ],
+    "outputs": [
+      "Verified Kindle documents path, byte count and SHA256",
+      "Original source digest and explicit native scan state",
+      "Actionable failure without a false success claim"
+    ],
+    "exclusions": [
+      "Jailbreaking and firmware changes",
+      "Email-based Amazon Send to Kindle",
+      "Silent key export or passwordless login",
+      "Only finding or downloading without device delivery"
+    ],
+    "qiaomu_defaults": {}
+  },
+  "triggers": {
+    "should_trigger": [
+      "下载《道德经》并发到 Kindle",
+      "把这本 EPUB 传到 Kindle",
+      "Send this ebook to Kindle",
+      "发送 /tmp/book.pdf 到 Kindle",
+      "用 qiaomu-send2kindle 给 Kindle 传书",
+      "qiaomu-send2kindle"
+    ],
+    "should_not_trigger": [
+      "帮我下载一本电子书",
+      "找一下《道德经》",
+      "解释 KOReader 是什么",
+      "Kindle 越狱教程",
+      "用邮件发送到 Kindle",
+      "下载这本书，不要发送到 Kindle"
+    ],
+    "near_neighbor": [
+      "把 PDF 发给朋友",
+      "只解释 Kindle 怎么用",
+      "我的 Kindle 不能开机"
+    ]
+  },
+  "workflow": {
+    "router_rules": [],
+    "compact_workflow": [],
+    "gate_ladder": [],
+    "output_contract": []
+  },
+  "resources": {
+    "references": [
+      "references/pairing.md"
+    ],
+    "scripts": [
+      "scripts/kindle_convert.py",
+      "scripts/kindle_store.py",
+      "scripts/kindle_transport.py",
+      "scripts/kindle_usb.py",
+      "scripts/receiver/prepare.py",
+      "scripts/runtime_paths.py",
+      "scripts/send_to_kindle.py",
+      "scripts/setup_runtime.py"
+    ],
+    "evals": [
+      "evals/converter.test.mjs",
+      "evals/epub-fixture.mjs",
+      "evals/trigger_cases.json"
+    ],
+    "reports": [
+      "reports/creation-handoff.md",
+      "reports/prior-art-research.md",
+      "reports/runtime-evidence.json",
+      "reports/skill-ir.json",
+      "reports/trigger-eval.json"
+    ]
+  },
+  "portability": {
+    "canonical_format": "agent-skills",
+    "adapter_targets": [
+      "openai",
+      "claude",
+      "generic",
+      "agent-skills-compatible"
+    ],
+    "activation": {},
+    "execution": {},
+    "trust": {
+      "source_tier": "first-party",
+      "remote_inline_execution": "forbid"
+    },
+    "permissions": {
+      "network": "explicit ebook MCP download, paired private-LAN Kindle, and checksum-pinned receiver preparation",
+      "file_write": "requested downloads, machine device metadata/runtime, explicitly selected USB public pairing/settings",
+      "subprocess": "isolated Python dependencies and fixed bundled Node converter; no shell interpolation",
+      "secrets": "native OS credential backend only; in-memory auth; no vault, argv, log, file export or plaintext fallback"
+    },
+    "degradation": {}
+  },
+  "gates": {},
+  "evidence_boundary": {
+    "generated_reports_are_evidence": true,
+    "planned_work_is_evidence": false,
+    "missing_external_or_human_evidence_label": "missing evidence",
+    "public_claim_policy": "claim only what local validation, install proof, human review, or provider-backed evidence actually supports"
+  }
+}

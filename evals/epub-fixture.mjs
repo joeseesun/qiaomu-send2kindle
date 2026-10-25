@@ -1,0 +1,16 @@
+// Adapted from Qiaomu Reader (GPL-3.0-only). Synthetic test content.
+import JSZip from '../scripts/converter/node_modules/jszip/lib/index.js';
+export async function epubFixture({ ncx = false, badResource = false, badLink = false, encrypted = false } = {}) {
+  const zip = new JSZip();
+  zip.file('mimetype', 'application/epub+zip', { compression: 'STORE' });
+  zip.file('META-INF/container.xml', '<container><rootfiles><rootfile full-path="书籍/content.opf"/></rootfiles></container>');
+  if (encrypted) zip.file('META-INF/encryption.xml', '<encryption/>');
+  zip.file('书籍/content.opf', `<package xmlns="http://www.idpf.org/2007/opf" version="${ncx ? '2.0' : '3.0'}"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:title>中文测试书 &amp; English</dc:title><dc:creator>测试作者</dc:creator><dc:language>zh-CN</dc:language><meta name="cover" content="pic"/></metadata><manifest><item id="c1" href="章节%20一.xhtml" media-type="application/xhtml+xml"/><item id="c2" href="notes.xhtml" media-type="application/xhtml+xml"/><item id="pic" href="图.png" media-type="image/png" properties="cover-image"/><item id="css" href="style.css" media-type="text/css"/><item id="nav" href="${ncx ? 'toc.ncx' : 'nav.xhtml'}" media-type="${ncx ? 'application/x-dtbncx+xml' : 'application/xhtml+xml'}" ${ncx ? '' : 'properties="nav"'}/></manifest><spine toc="nav"><itemref idref="c1"/><itemref idref="c2" linear="no"/></spine></package>`);
+  zip.file('书籍/章节 一.xhtml', `<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"><head><title>第一章</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="start">第一章：中文开头</h1><p>${'道可道，非常道。天地玄黄。'.repeat(900)}</p><h2 id="later">第二节定位</h2><p>保留正文 &amp; 标点 &nbsp; Ω 𠀀。</p><img src="${badResource ? 'missing.svg' : '图.png'}" alt="封面图"/><a href="${badLink ? 'missing.xhtml' : 'notes.xhtml#note'}">脚注</a><script src="https://example.invalid/book.js">throw Error('must never run')</script></body></html>`);
+  zip.file('书籍/notes.xhtml', '<html xmlns="http://www.w3.org/1999/xhtml"><head><title>注释</title></head><body><h1 id="note">注释内容</h1><p>脚注正文</p><a href="章节%20一.xhtml#later">返回第二节</a></body></html>');
+  zip.file('书籍/style.css', 'p { text-indent: 2em; line-height: 1.6; } h2 { page-break-before: always; } @import "https://example.invalid/tracker.css";');
+  const entries = [['第一章', '章节%20一.xhtml#start', 1], ['第二节', '章节%20一.xhtml#later', 2], ['注释', 'notes.xhtml#note', 1]];
+  zip.file(ncx ? '书籍/toc.ncx' : '书籍/nav.xhtml', ncx ? `<ncx><navMap>${entries.map(([label, href], i) => `<navPoint id="n${i}"><navLabel><text>${label}</text></navLabel><content src="${href}"/></navPoint>`).join('')}</navMap></ncx>` : `<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"><body><nav epub:type="toc"><ol><li><a href="${entries[0][1]}">第一章</a><ol><li><a href="${entries[1][1]}">第二节</a></li></ol></li><li><a href="${entries[2][1]}">注释</a></li></ol></nav></body></html>`);
+  zip.file('书籍/图.png', Uint8Array.from(Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9V8AAAAASUVORK5CYII=', 'base64')));
+  return zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' });
+}

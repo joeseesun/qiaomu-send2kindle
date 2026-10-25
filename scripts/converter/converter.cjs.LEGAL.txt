@@ -1,0 +1,5 @@
+/*! Adapted from Lyceum, Copyright (c) 2026 Higino P. C. Neto, MIT.
+ * Source: https://github.com/Higino-Neto/Lyceum/tree/806be2fd3677c77cd2bff5f61793ef4564ad2cca
+ * Qiaomu adaptation: portable XML DOM, no source EPUB embedding, bounded input.
+ * Complete permission notice: licenses/lyceum-MIT.txt.
+ */

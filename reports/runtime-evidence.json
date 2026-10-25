@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-25",
+  "version": "2.0.0",
+  "host": "macOS",
+  "python_tests": 16,
+  "independent_converter_tests": 3,
+  "clean_install": {
+    "node_modules_required": false,
+    "system_credential_reused": true,
+    "vault_required": false,
+    "obsidian_access_denied_in_test_process_only": true
+  },
+  "real_device": {
+    "koreader": {
+      "ok": true,
+      "mode": "koreader",
+      "converted": false,
+      "bytes": 3032,
+      "sha256": "3ed1ea141b39dd6ce4df5fbeb6f389d1ff7eec50361ee093856b0518e53c5acb",
+      "source_bytes": 3032,
+      "source_sha256": "3ed1ea141b39dd6ce4df5fbeb6f389d1ff7eec50361ee093856b0518e53c5acb",
+      "readback_verified": true
+    },
+    "native": {
+      "ok": true,
+      "mode": "native",
+      "converted": true,
+      "bytes": 11188,
+      "sha256": "98d64e4d08dd8ae3473ba5bb07db28feebf62c63519dcd398aa7711dd5fcbe1c",
+      "source_bytes": 3032,
+      "source_sha256": "3ed1ea141b39dd6ce4df5fbeb6f389d1ff7eec50361ee093856b0518e53c5acb",
+      "readback_verified": true,
+      "scanRequested": true,
+      "scanPending": false
+    }
+  },
+  "obsidian_existing_plugin_source_unchanged": true,
+  "secrets_in_skill": false,
+  "missing_evidence": [
+    "Windows/Linux native credential and real-device runtime",
+    "fresh physical native receiver installation",
+    "native library visibility and on-device opening",
+    "device reboot and reconnect",
+    "provider-backed natural-language routing",
+    "full matched MCP-download-to-device run for v2"
+  ]
+}
