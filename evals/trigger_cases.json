@@ -2,7 +2,8 @@
   "positive_concepts": {
     "device": [
       "kindle",
-      "qiaomu-send2kindle"
+      "qiaomu-send2kindle",
+      "koreader"
     ],
     "action": [
       "发送",
@@ -10,7 +11,11 @@
       "传到",
       "send",
       "传书",
-      "qiaomu-send2kindle"
+      "qiaomu-send2kindle",
+      "安装",
+      "更新",
+      "校验",
+      "完整性"
     ]
   },
   "description_required_concepts": [
@@ -22,7 +27,9 @@
     "邮件",
     "不要发送",
     "只解释",
-    "越狱教程"
+    "越狱教程",
+    "刷固件",
+    "更新固件"
   ],
   "should_trigger": [
     "下载《道德经》并发到 Kindle",
@@ -30,7 +37,10 @@
     "Send this ebook to Kindle",
     "发送 /tmp/book.pdf 到 Kindle",
     "用 qiaomu-send2kindle 给 Kindle 传书",
-    "qiaomu-send2kindle"
+    "qiaomu-send2kindle",
+    "更新 Kindle 的 KOReader 插件并校验",
+    "安装 Kindle 上的 KOReader 插件",
+    "检查 Kindle 文件完整性"
   ],
   "should_not_trigger": [
     "帮我下载一本电子书",
@@ -38,7 +48,8 @@
     "解释 KOReader 是什么",
     "Kindle 越狱教程",
     "用邮件发送到 Kindle",
-    "下载这本书，不要发送到 Kindle"
+    "下载这本书，不要发送到 Kindle",
+    "给 Kindle 更新固件"
   ],
   "near_neighbor": [
     "把 PDF 发给朋友",

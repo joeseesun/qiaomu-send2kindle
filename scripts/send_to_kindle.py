@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Wi-Fi Kindle delivery using bundled code and OS credentials; no Obsidian host."""
+"""[INPUT]: 用户命令、系统凭据、已配对 Kindle 与本地文件。
+[OUTPUT]: 无线传书、安装与设备端完整性校验收据。
+[POS]: skill 命令入口；转发到传输、转换与安装模块。
+[PROTOCOL]: Update this header on change, then check AGENTS.md
+"""
 from __future__ import annotations
 import argparse,hashlib,importlib.util,json,os,re,subprocess,sys,uuid,zipfile
 import xml.etree.ElementTree as ET
@@ -109,12 +113,13 @@ class Parser(argparse.ArgumentParser):
 def main():
     try:
         parser=Parser(description=__doc__)
-        parser.add_argument('command',choices=['inspect','status','pair','configure','connect','discover','send','migrate-legacy','prepare-receiver','set-default-mode'])
+        parser.add_argument('command',choices=['inspect','status','pair','configure','connect','discover','send','migrate-legacy','prepare-receiver','set-default-mode','install-package','verify-installation'])
         parser.add_argument('file',nargs='?')
         parser.add_argument('--mode',choices=list(MODES))
         parser.add_argument('--device');parser.add_argument('--usb');parser.add_argument('--host');parser.add_argument('--port',type=int)
         parser.add_argument('--trust-new-device',action='store_true',help='Only for the first connection after explicit physical USB pairing')
         parser.add_argument('--stdin',action='store_true',help='Explicit one-time legacy import through a pipe')
+        parser.add_argument('--sha256',help='Publisher SHA-256 of the installable ZIP')
         args=parser.parse_args()
         if args.command=='inspect':
             if not args.file:raise KindleError('file','Provide a local ebook path.')
@@ -132,7 +137,12 @@ def main():
                     value=keys.get(device['credential_id'])
                     if value:parse_key(value)
                     devices.append({'device':did,'credential_present':bool(value),'profiles':device['profiles']})
-                result={'ok':True,'version':'2.0.0','obsidian_required':False,'credential_store':'operating-system','config':str(store.path),'active_device':data.get('active_device'),'default_mode':data.get('default_mode'),'devices':devices}
+                result={'ok':True,'version':'2.1.0','obsidian_required':False,'credential_store':'operating-system','config':str(store.path),'active_device':data.get('active_device'),'default_mode':data.get('default_mode'),'devices':devices}
+            elif args.command in {'install-package','verify-installation'}:
+                if not args.file:raise KindleError('file','Provide the installable ZIP path.')
+                if args.usb:raise KindleError('verification-native','USB host checks cannot establish native verification. Safely eject and connect over paired SSH.')
+                from kindle_install import maintenance
+                result=maintenance(store,keys,args.file,args.sha256,args.device,args.mode,install=args.command=='install-package')
             elif args.command in {'pair','configure'}:
                 mode=args.mode or store.load().get('default_mode','koreader');volume=args.usb
                 if not volume:
@@ -171,7 +181,7 @@ def main():
                         try:result.update(scan_native(profile,private))
                         except (KindleError,OSError):result.update(scanRequested=False,scanPending=None,warning='scan-unconfirmed')
                     result=delivery_receipt(result,book)
-        print(json.dumps(result,ensure_ascii=False));return 0
+        print(json.dumps(result,ensure_ascii=False));return 0 if result.get('ok') else 1
     except KeyboardInterrupt:
         print(json.dumps({'ok':False,'code':'cancelled','error':'Cancelled; check device before resending if delivery had already finalized.'}));return 130
     except (KindleError,OSError,ValueError,KeyError,TypeError,RuntimeError,zipfile.BadZipFile,ET.ParseError,subprocess.TimeoutExpired) as error:

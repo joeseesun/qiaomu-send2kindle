@@ -1,10 +1,10 @@
 ---
 name: qiaomu-send2kindle
 description: |
-  将电子书通过 Wi-Fi 无线发送到已越狱并已配对的 Kindle，兼容 KOReader 与 Kindle 原生接收端。用户说“下载《书名》并发到 Kindle”“把这本 EPUB 传到 Kindle”“Send this ebook to Kindle”或点名 qiaomu-send2kindle 时使用。需要找书或下载时先调用乔木电子书 MCP，再核对图书并传送。仅找书、仅下载、解释 Kindle、越狱、刷固件和邮件 Send to Kindle 不属于此 skill。
+  将电子书通过 Wi-Fi 发送到已配对的 Kindle，兼容 KOReader 与原生接收端；安装或更新 KOReader 和插件后，从 Kindle 本机逐文件校验 SHA-256。用户说“发到 Kindle”“Send this ebook to Kindle”“更新 Kindle 的 KOReader 插件”“检查 Kindle 文件完整性”或点名 qiaomu-send2kindle 时使用。需要找书或下载时先用乔木电子书 MCP。仅找书、仅下载、解释 Kindle、越狱、刷固件和邮件 Send to Kindle 不属于此 skill。
 metadata:
   author: Qiaomu
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # 乔木无线传书
@@ -27,6 +27,14 @@ metadata:
 3. **核对图书**：`python3 scripts/send_to_kindle.py inspect '/绝对路径/书.epub'`。对照文件名和 EPUB 的 title/creator/language；不能凭搜索第一名直接发送。明显不符重搜一次；译本/作者/语言有歧义再询问。PDF 检查标题页或封面。
 4. **无线发送**：`python3 scripts/send_to_kindle.py send '/绝对路径/书.epub'`。`--mode native` / `--mode koreader` 仅选择本次方式，不修改默认。地址变化会在有固定设备身份的前提下扫描当前直接连接的私有子网。原生 EPUB 在本地转 AZW3，再上传；书落入 `/mnt/us/documents/`，不覆盖同名文件，不向 Obsidian 库另存副本。
 5. **核验收据**：仅 `ok:true` 表示送达。上传的临时文件须在设备上完整读回、核对字节数和 SHA256 后才改为最终文件名。直传摘要须等于源文件；转换后的 AZW3 摘要对应传输文件，原 EPUB 摘要另列 `source_sha256`。原生 `scanRequested` / `scanPending` 单独报告；索引未确认时先查看，不能盲目重发。送达不代表已在设备上打开阅读。
+
+## 安装、更新与完整性门禁
+
+用户要求安装或更新已配对 Kindle 的 KOReader／插件时，读取 [设备端完整性](references/integrity.md)。使用 `install-package ZIP --sha256 SHA256`，不可绕过它直接覆盖后报成功。该命令先验证 ZIP、备份将覆盖的文件，再安装并强制运行 Kindle 本机文件读取、大小与 SHA-256 检查；还会检查已登记的 KOReader 和插件基线。失败返回 `ok:false` 和具体文件，回退本次覆盖内容，保留备份。
+
+首次维护前，先用对应版本官方 KOReader ZIP 执行 `verify-installation ZIP --sha256 SHA256`，建立固定主机身份绑定的本体基线。没有本体基线时，插件安装停止。更新 KOReader 本体前必须退出阅读器；插件更新可保留进程，完成后请用户重启验证。
+
+通过 USB 或其他工具更新后，安全弹出、连接已配对 SSH，再自动执行 `verify-installation`。设备未连接时标记“待设备端校验”，不能把电脑／SFTP 侧校验当作完成。只有非空、完整的设备端校验通过才更新基线；这不代替重启、打开书籍和待机／唤醒验收。不后台监控用户在 skill 外进行的任意文件操作，不改变原生接收端的受限命令权限。
 
 ## 失败与边界
 

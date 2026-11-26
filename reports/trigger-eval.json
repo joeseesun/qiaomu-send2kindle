@@ -7,8 +7,8 @@
   ],
   "missing_description_concepts": [],
   "summary": {
-    "total": 15,
-    "passed": 15,
+    "total": 19,
+    "passed": 19,
     "false_positive": 0,
     "false_negative": 0,
     "pass_rate": 1.0
@@ -93,6 +93,45 @@
           "device"
         ],
         "negative_pattern": null
+      },
+      {
+        "prompt": "更新 Kindle 的 KOReader 插件并校验",
+        "family": "default",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "安装 Kindle 上的 KOReader 插件",
+        "family": "default",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "检查 Kindle 文件完整性",
+        "family": "default",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": null
       }
     ],
     "should_not_trigger": [
@@ -122,8 +161,10 @@
         "expected_trigger": false,
         "predicted_trigger": false,
         "passed": true,
-        "score": 0.0,
-        "matched_concepts": [],
+        "score": 0.333,
+        "matched_concepts": [
+          "device"
+        ],
         "negative_pattern": null
       },
       {
@@ -163,6 +204,19 @@
           "device"
         ],
         "negative_pattern": "不要发送"
+      },
+      {
+        "prompt": "给 Kindle 更新固件",
+        "family": "default",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "action",
+          "device"
+        ],
+        "negative_pattern": "更新固件"
       }
     ],
     "near_neighbor": [

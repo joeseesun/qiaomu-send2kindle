@@ -1,6 +1,6 @@
 # 乔木无线传书 · Qiaomu Send to Kindle
 
-直接对 AI 说“把这本书发到 Kindle”。自动核对图书，经 Wi-Fi 传送并完整回读校验；同时支持 KOReader 与 Kindle 原生阅读，EPUB 可本地转 AZW3。
+直接对 AI 说“把这本书发到 Kindle”。自动核对图书，经 Wi-Fi 传送并完整回读校验；同时支持 KOReader 与 Kindle 原生阅读，EPUB 可本地转 AZW3。安装或更新 KOReader／插件时，自动从 Kindle 本机逐文件检查 SHA-256。
 
 **无需打开 Obsidian、无需 Calibre、无需再装传书 App。**原有 Obsidian 传书功能继续保留，按你的使用习惯选择入口。
 
@@ -37,6 +37,19 @@ KOReader 普通文件可直接传；原生模式支持 EPUB（转 AZW3）、PDF�
 成功收据包含设备目标路径、字节数、SHA256、模式与是否转换；源文件摘要单列。临时上传文件完整读回一致才落为最终文件，同名原书保留。原生索引状态单独报告；“送达”“书库索引”“设备打开阅读”分别验收。
 
 Obsidian 是另一个继续保留的入口。既有插件保持原实现；本次不关闭应用、不停用插件。迁移旧身份后两个入口可使用同一设备身份，但当前插件并未自动切换到系统存储。
+
+## 安装更新的自动校验
+
+先用匹配版本的官方 KOReader ZIP 建立本体基线。后续统一用安装入口，备份、安装和设备端校验连续执行：
+
+```bash
+python3 scripts/send_to_kindle.py verify-installation /path/to/koreader.zip --sha256 PUBLISHER_SHA256 --mode koreader
+python3 scripts/send_to_kindle.py install-package /path/to/simpleui.koplugin.zip --sha256 PUBLISHER_SHA256 --mode koreader
+```
+
+校验在 Kindle 本机执行，不以电脑或 SFTP 能读到文件作为成功依据。每次检查同时覆盖本次包与已登记本体／插件。失败会报出缺失、不可读或哈希不同的路径，回退本次覆盖并保留备份；不能把部分完成或未连接标成成功。更新本体前必须退出 KOReader，个人设置与缓存不允许进入安装包。详见[设备端完整性](references/integrity.md)。
+
+此门禁适用于 skill 的安装入口；USB 或外部工具更新后也必须再执行校验。没有系统后台监听器。通过只表示文件完整，重启、阅读和待机／唤醒另行验证。
 
 ## 验证与平台状态
 

@@ -1,6 +1,6 @@
 {
   "date": "2026-10-25",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "host": "macOS",
   "python_tests": 16,
   "independent_converter_tests": 3,
@@ -43,5 +43,23 @@
     "device reboot and reconnect",
     "provider-backed natural-language routing",
     "full matched MCP-download-to-device run for v2"
-  ]
+  ],
+  "installation_integrity": {
+    "date": "2026-11-26",
+    "host_platform": "macOS",
+    "device_model": "Kindle Paperwhite 5 Signature Edition",
+    "python_tests_passed": 27,
+    "trigger_cases_passed": 19,
+    "core_files_native_verified": 1034,
+    "combined_files_native_verified": 1366,
+    "noop_install_native_gate_passed": true,
+    "native_negative_checks": [
+      "sha256 mismatch",
+      "missing file"
+    ],
+    "device_content_changed_during_checks": false,
+    "baseline_bound_to_pinned_host": true,
+    "real_changed_installation_and_rollback": "not device-tested; covered by isolated behavior tests",
+    "windows_linux_hardware": "not verified"
+  }
 }
