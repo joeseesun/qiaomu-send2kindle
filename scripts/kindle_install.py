@@ -219,7 +219,7 @@ def load_baseline(path, fingerprint):
         return {'fingerprint': fingerprint, 'components': []}
     if path.is_symlink() or path.stat().st_size > 8 * 1024 * 1024:
         raise KindleError('baseline', 'Invalid local installation baseline.')
-    value = json.loads(path.read_text())
+    value = json.loads(path.read_text(encoding='utf-8'))
     if value.get('fingerprint') != fingerprint or not isinstance(value.get('components'), list):
         raise KindleError('baseline', 'Installation baseline belongs to another device identity.')
     for component in value['components']:
@@ -263,7 +263,7 @@ def maintenance(store, keys, package, expected, device_id=None, mode=None, insta
                         backup.mkdir(mode=0o700)
                         (backup / 'operation.json').write_text(json.dumps({
                             'component': candidate['component'], 'package_sha256': candidate['package_sha256'],
-                            'files': candidate['files']}, ensure_ascii=False, indent=2))
+                            'files': candidate['files']}, ensure_ascii=False, indent=2), encoding='utf-8')
                         with zipfile.ZipFile(candidate['zip']) as archive:
                             for item in candidate['files']:
                                 path = safe_remote_path(sftp, item['path'])
@@ -309,7 +309,7 @@ def maintenance(store, keys, package, expected, device_id=None, mode=None, insta
                 temp = baseline_path.with_name('baseline-' + uuid.uuid4().hex + '.tmp')
                 try:
                     descriptor = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-                    with os.fdopen(descriptor, 'w') as stream:
+                    with os.fdopen(descriptor, 'w', encoding='utf-8') as stream:
                         json.dump(value, stream, ensure_ascii=False)
                         stream.flush(); os.fsync(stream.fileno())
                     os.replace(temp, baseline_path)

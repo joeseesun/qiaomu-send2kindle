@@ -55,9 +55,11 @@ class PackageTests(unittest.TestCase):
     def test_archive_boundaries(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            for name in ['../escape', '/absolute', 'p.koplugin/../escape', 'p.koplugin/a\nb', 'p.koplugin/a\\b']:
+            for name in ['../escape', '/absolute', 'p.koplugin/../escape', 'p.koplugin/a\nb']:
                 path, sha = self.package(root, {'p.koplugin/main.lua': 'return {}', name: 'bad'})
                 with self.assertRaises(KindleError): install.package_manifest(path, sha)
+            # Windows 的 ZipInfo 会先规范化反斜杠；直接验证原始路径边界。
+            with self.assertRaises(KindleError): install.validate_target('koreader/plugins/p.koplugin/a\\b')
             for name in ['koreader/settings/SSH/authorized_keys', 'koreader/settings.reader.lua', 'extensions/other/main.sh']:
                 path, sha = self.package(root, {'koreader/reader.lua': 'ok', 'koreader/frontend/apps/reader/readerui.lua': 'ok', name: 'bad'})
                 with self.assertRaises(KindleError): install.package_manifest(path, sha)

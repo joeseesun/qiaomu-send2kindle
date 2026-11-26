@@ -1,4 +1,8 @@
-"""Behavior/security regression tests for the shipped standalone skill."""
+"""[INPUT]: 模拟凭据、安装文件、独立 SSH/SFTP 测试服务。
+[OUTPUT]: 传书、配对、身份固定和回读的回归结果。
+[POS]: 独立 skill 的原有行为及安全测试。
+[PROTOCOL]: Update this header on change, then check AGENTS.md
+"""
 import contextlib,hashlib,importlib.util,io,json,os,socket,stat,sys,tempfile,threading,time,unittest,zipfile
 from pathlib import Path
 from unittest.mock import patch
@@ -121,7 +125,7 @@ class CoreTests(unittest.TestCase):
    before=state.path.read_bytes();self.assertEqual(profile_for(state,mode='native')[2],'native');self.assertEqual(state.path.read_bytes(),before)
  def test_script_does_not_launch_or_import_obsidian(self):
   for name in ['send_to_kindle.py','kindle_store.py','kindle_transport.py','kindle_usb.py','kindle_convert.py']:
-   text=(ROOT/'scripts'/name).read_text()
+   text=(ROOT/'scripts'/name).read_text(encoding='utf-8')
    self.assertNotIn('run_host(',text);self.assertNotIn('getSecret(',text);self.assertNotIn('app.plugins',text);self.assertNotIn("'vault='",text)
 
 class TestServer(paramiko.ServerInterface):
