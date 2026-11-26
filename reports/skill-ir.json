@@ -1,9 +1,9 @@
 {
   "schema_version": "2.0.0-qiaomu-lite",
-  "generated_at": "2026-10-25",
+  "generated_at": "2026-11-26",
   "package": {
     "name": "qiaomu-send2kindle",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "owner": "Qiaomu",
     "maturity_tier": "governed",
     "lifecycle_stage": null,
@@ -11,20 +11,22 @@
     "upstream_sync": {}
   },
   "intent": {
-    "description": "将电子书通过 Wi-Fi 无线发送到已越狱并已配对的 Kindle，兼容 KOReader 与 Kindle 原生接收端。用户说“下载《书名》并发到 Kindle”“把这本 EPUB 传到 Kindle”“Send this ebook to Kindle”或点名 qiaomu-send2kindle 时使用。需要找书或下载时先调用乔木电子书 MCP，再核对图书并传送。仅找书、仅下载、解释 Kindle、越狱、刷固件和邮件 Send to Kindle 不属于此 skill。\n",
-    "job_to_be_done": "Find the requested ebook, inspect its identity and deliver it over Wi-Fi with a verified receipt.",
+    "description": "将电子书通过 Wi-Fi 发送到已配对的 Kindle，兼容 KOReader 与原生接收端；安装或更新 KOReader 和插件后，从 Kindle 本机逐文件校验 SHA-256。用户说“发到 Kindle”“Send this ebook to Kindle”“更新 Kindle 的 KOReader 插件”“检查 Kindle 文件完整性”或点名 qiaomu-send2kindle 时使用。需要找书或下载时先用乔木电子书 MCP。仅找书、仅下载、解释 Kindle、越狱、刷固件和邮件 Send to Kindle 不属于此 skill。\n",
+    "job_to_be_done": "Deliver requested ebooks and maintain KOReader/plugin packages with verified Kindle-native installation integrity.",
     "target_users": [
       "Owners of paired jailbroken Kindle devices, with or without Obsidian"
     ],
     "inputs": [
       "Book title and optional author, language or edition",
       "Or an explicit local ebook path",
-      "Physically paired device and unlocked OS credential storage"
+      "Physically paired device and unlocked OS credential storage",
+      "Installable KOReader/plugin ZIP and its publisher or trusted frozen-build SHA-256"
     ],
     "outputs": [
       "Verified Kindle documents path, byte count and SHA256",
       "Original source digest and explicit native scan state",
-      "Actionable failure without a false success claim"
+      "Actionable failure without a false success claim",
+      "Kindle-native SHA-256 result, verified file count, rollback state and identity-bound installation baseline"
     ],
     "exclusions": [
       "Jailbreaking and firmware changes",
@@ -41,7 +43,10 @@
       "Send this ebook to Kindle",
       "发送 /tmp/book.pdf 到 Kindle",
       "用 qiaomu-send2kindle 给 Kindle 传书",
-      "qiaomu-send2kindle"
+      "qiaomu-send2kindle",
+      "更新 Kindle 的 KOReader 插件并校验",
+      "安装 Kindle 上的 KOReader 插件",
+      "检查 Kindle 文件完整性"
     ],
     "should_not_trigger": [
       "帮我下载一本电子书",
@@ -49,7 +54,8 @@
       "解释 KOReader 是什么",
       "Kindle 越狱教程",
       "用邮件发送到 Kindle",
-      "下载这本书，不要发送到 Kindle"
+      "下载这本书，不要发送到 Kindle",
+      "给 Kindle 更新固件"
     ],
     "near_neighbor": [
       "把 PDF 发给朋友",
@@ -65,10 +71,13 @@
   },
   "resources": {
     "references": [
+      "references/AGENTS.md",
+      "references/integrity.md",
       "references/pairing.md"
     ],
     "scripts": [
       "scripts/kindle_convert.py",
+      "scripts/kindle_install.py",
       "scripts/kindle_store.py",
       "scripts/kindle_transport.py",
       "scripts/kindle_usb.py",
@@ -105,9 +114,9 @@
       "remote_inline_execution": "forbid"
     },
     "permissions": {
-      "network": "explicit ebook MCP download, paired private-LAN Kindle, and checksum-pinned receiver preparation",
-      "file_write": "requested downloads, machine device metadata/runtime, explicitly selected USB public pairing/settings",
-      "subprocess": "isolated Python dependencies and fixed bundled Node converter; no shell interpolation",
+      "network": "explicit ebook MCP download, paired private-LAN Kindle, checksum-pinned packages and receiver preparation",
+      "file_write": "requested downloads, machine device metadata/runtime, explicitly selected USB public pairing/settings, requested KOReader/plugin package installation with verified backups",
+      "subprocess": "isolated Python dependencies and fixed bundled Node converter and fixed Kindle-native checksum program; no untrusted shell interpolation",
       "secrets": "native OS credential backend only; in-memory auth; no vault, argv, log, file export or plaintext fallback"
     },
     "degradation": {}

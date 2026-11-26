@@ -1,11 +1,11 @@
 {
   "name": "qiaomu-send2kindle",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "owner": "Qiaomu",
-  "updated_at": "2026-10-25",
+  "updated_at": "2026-11-26",
   "status": "release-candidate",
   "maturity_tier": "governed",
-  "review_cadence": "on SSH, system credential, receiver or ebook MCP changes",
+  "review_cadence": "on SSH, system credential, receiver, install manifest or ebook MCP changes",
   "release_gates": [
     "package validation",
     "trigger eval",
@@ -13,22 +13,25 @@
     "independent AZW3 reader tests",
     "real device readback in both modes",
     "clean-install independent process",
-    "secret scan"
+    "secret scan",
+    "native installation integrity and fail-closed rollback regression"
   ],
   "intent": {
-    "job_to_be_done": "Find the requested ebook, inspect its identity and deliver it over Wi-Fi with a verified receipt.",
+    "job_to_be_done": "Deliver requested ebooks and maintain KOReader/plugin packages with verified Kindle-native installation integrity.",
     "target_users": [
       "Owners of paired jailbroken Kindle devices, with or without Obsidian"
     ],
     "inputs": [
       "Book title and optional author, language or edition",
       "Or an explicit local ebook path",
-      "Physically paired device and unlocked OS credential storage"
+      "Physically paired device and unlocked OS credential storage",
+      "Installable KOReader/plugin ZIP and its publisher or trusted frozen-build SHA-256"
     ],
     "outputs": [
       "Verified Kindle documents path, byte count and SHA256",
       "Original source digest and explicit native scan state",
-      "Actionable failure without a false success claim"
+      "Actionable failure without a false success claim",
+      "Kindle-native SHA-256 result, verified file count, rollback state and identity-bound installation baseline"
     ],
     "exclusions": [
       "Jailbreaking and firmware changes",
